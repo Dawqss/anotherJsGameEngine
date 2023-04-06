@@ -1,16 +1,18 @@
+import {GameObject} from "./GameObject";
+
 type Config = any; // to be created
 
 export class Renderer {
     canvasElement: HTMLCanvasElement;
     ctx: CanvasRenderingContext2D;
-    animationFrameHandlerId: number;
+    animationFrameHandlerId: number | undefined;
 
     lastTime = 0;
     dropCounter = 0;
 
     moveDeltaInMs = 600;
 
-    constructor(private canvasId: string, private scale: {x: number, y: number}) {
+    constructor(private canvasId: string, private scale: {x: number, y: number}, private gameObjects: GameObject[]) {
         this.canvasElement = document.getElementById(canvasId) as HTMLCanvasElement;
         this.ctx = this.canvasElement.getContext('2d')!;
         this.ctx.scale(scale.x, scale.y);
@@ -31,6 +33,8 @@ export class Renderer {
         this.dropCounter += deltaTime;
 
         const renderConfig = {}
+
+        console.log(this.gameObjects);
 
         // renderConfig should be created from calculation based on provided gameObjects
         // some sorting and they dependency injection?

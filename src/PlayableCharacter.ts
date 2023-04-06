@@ -9,7 +9,8 @@ export const emptyPlayableKeyMap: Record<KeyboardArrows, boolean> = {
 };
 
 export abstract class PlayableObject extends GameObject {
-    keyMap: Record<KeyboardArrows, boolean> = emptyPlayableKeyMap;
+    public keyMap: Record<KeyboardArrows, boolean> = emptyPlayableKeyMap;
+    public moveDeltaInMs: number = 600;
 
     constructor(public sizePosition: GameObjectSizePosition) {
         super(sizePosition);

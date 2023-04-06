@@ -2,6 +2,10 @@ import {emptyPlayableKeyMap, PlayableObject} from "../src/PlayableCharacter";
 import {KeyboardArrows, RenderConfig} from "../src/types";
 
 export class CharacterFatRectangle extends PlayableObject {
+    moveDeltaInMs = 16.6;
+    // TODO: add probably this & acceleration
+    multiplier: number = 2.5;
+
     getRenderConfig = (): RenderConfig => {
         this.config = {
             rect: {
@@ -21,8 +25,8 @@ export class CharacterFatRectangle extends PlayableObject {
     recalculate() {
         // we should extract this to other class eg. PlayerControls (should be abstract)
         const vector = {
-            x: this.getXAxisFromKeyMap(),
-            y: this.getYAxisFromKeyMap()
+            x: this.getXAxisFromKeyMap() * this.multiplier,
+            y: this.getYAxisFromKeyMap() * this.multiplier
         };
 
         this.keyMap = emptyPlayableKeyMap;
@@ -43,7 +47,7 @@ export class CharacterFatRectangle extends PlayableObject {
         }
 
         if (this.keyMap[KeyboardArrows.ArrowUp] || this.keyMap[KeyboardArrows.ArrowDown]) {
-            x = x / 2
+            x = x / 1.4
         }
 
         return x;
@@ -53,15 +57,15 @@ export class CharacterFatRectangle extends PlayableObject {
         let y = 0;
 
         if (this.keyMap[KeyboardArrows.ArrowDown]) {
-            y = y - 1;
-        }
-
-        if (this.keyMap[KeyboardArrows.ArrowUp]) {
             y = y + 1;
         }
 
+        if (this.keyMap[KeyboardArrows.ArrowUp]) {
+            y = y - 1;
+        }
+
         if (this.keyMap[KeyboardArrows.ArrowLeft] || this.keyMap[KeyboardArrows.ArrowRight]) {
-            y = y / 2
+            y = y / 1.4
         }
 
         return y;

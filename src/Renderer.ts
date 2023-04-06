@@ -11,8 +11,6 @@ export class Renderer {
     lastTime = 0;
     dropCounter = 0;
 
-    moveDeltaInMs = 600;
-
     detectObject: any = undefined;
 
     constructor(private scale: {x: number, y: number}, private gameObjects: GameObject[], private playableObjects: PlayableObject[]) {
@@ -73,9 +71,8 @@ export class Renderer {
             }
         }
 
-        if (this.dropCounter >= this.moveDeltaInMs) {
-            for (let playableObject of this.playableObjects) {
-                // recalculate wstepny dla detectu
+        for (let playableObject of this.playableObjects) {
+            if (this.dropCounter >= playableObject.moveDeltaInMs) {
                 playableObject.recalculate();
                 frameDetect.push(playableObject.getFrameDetection());
             }
@@ -90,8 +87,8 @@ export class Renderer {
             renderConfigs.push(gameObject.getRenderConfig());
         }
 
-        if (this.dropCounter >= this.moveDeltaInMs) {
-            for (let playableObject of this.playableObjects) {
+        for (let playableObject of this.playableObjects) {
+            if (this.dropCounter >= playableObject.moveDeltaInMs) {
                 renderConfigs.push(playableObject.getRenderConfig());
             }
         }

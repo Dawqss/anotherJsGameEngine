@@ -15,9 +15,7 @@ export class Detection {
     testKurwa() {
         const [el1, el2] = this.detectionFrames;
 
-        console.log(el1, el2);
-
-        if (this.detectionFrames.length >= 2) {
+        if (this.detectionFrames.length >= 2 && this.aabbCollision(el1, el2)) {
             console.warn(this.aabbCollision(el1, el2));
         }
     }

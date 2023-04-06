@@ -38,9 +38,6 @@ export class Renderer {
                         this.ctx.fill()
                     }
                 }
-                // this.ctx.fill()
-                // ctx.rect(20, 20, 150, 100);
-                // ctx.stroke();
             }
         }
     }

@@ -31,6 +31,7 @@ export class Renderer {
         this.dropCounter += deltaTime;
 
         const renderConfig = {}
+
         // renderConfig should be created from calculation based on provided gameObjects
         // some sorting and they dependency injection?
 

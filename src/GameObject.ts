@@ -4,6 +4,9 @@ export class GameObject {
     positionX: number;
     positionY: number;
 
+    // nie da sie go ruszyc
+    immutable: boolean;
+
     // how to render it?
     // should probably return some config on end and then merge it with other configs
     // I should have here stable object or unstable objects information to check if I can somehow interact with object

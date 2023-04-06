@@ -26,6 +26,7 @@ export class Renderer {
     }
 
     render(config: Config) {
+        console.log(config)
         // some config to render all gameObjects (only not background)
     }
 

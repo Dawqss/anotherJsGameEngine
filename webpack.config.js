@@ -1,26 +1,33 @@
-const { CleanWebpackPlugin }  = require('clean-webpack-plugin')
-const path = require("path");
-
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
     mode: 'development',
-    entry: {
-        "mylib": path.resolve(__dirname, 'src/index.ts')
+    entry: './src/index.ts',
+    output: {
+        path: path.resolve(__dirname, './dist'),
+        filename: 'bundle.js',
+    },
+    plugins: [new HtmlWebpackPlugin()],
+    resolve: {
+        extensions: ['.ts', '.js'],
     },
     module: {
         rules: [
             {
                 test: /\.ts$/,
-                exclude: [/node_modules/],
-                loader: 'ts-loader'
-            }
-        ]
+                use: 'ts-loader',
+                exclude: /node_modules/,
+            },
+        ],
     },
-    output: {
-        chunkFilename: '[name].js',
-        filename: '[name].js'
+    devtool: 'source-map',
+    devServer: {
+        static: {
+            directory: path.join(__dirname, 'src'),
+        },
+        compress: true,
+        port: 3000,
+        open: true,
     },
-    devtool:'source-map',
-    resolve: { extensions: ['.ts'] },
-    plugins: [ new CleanWebpackPlugin(),]
-}
+};

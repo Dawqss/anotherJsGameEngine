@@ -18,6 +18,8 @@ export class Root {
     // Class Level (przejscie miedzy levelami?)
 
     start() {
+        // this should be wrapped with more layers eg. game and levels.
+        //but now this is prototype
         this.renderer.start();
     }
 }

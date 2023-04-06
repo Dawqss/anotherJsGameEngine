@@ -14,4 +14,8 @@ export class GameObject {
     // 2. create calculation on character and create some data information from it
     // 3. pass it to unstable object so we can interact with them (eg fire torch, little grass movement etc)
     // 4. render all things from gameObjects or/and character object
+
+    getRenderConfig(): any {
+
+    }
 }

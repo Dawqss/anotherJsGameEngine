@@ -1,5 +1,6 @@
 import {GameObject} from "./GameObject";
-import {Config} from "./types";
+import {RenderConfig} from "./types";
+import {PlayableObject} from "./PlayableCharacter";
 
 export class Renderer {
     canvasElement: HTMLCanvasElement;
@@ -11,17 +12,19 @@ export class Renderer {
 
     moveDeltaInMs = 600;
 
-    constructor(private canvasId: string, private scale: {x: number, y: number}, private gameObjects: GameObject[]) {
+    constructor(private canvasId: string, private scale: {x: number, y: number}, private gameObjects: GameObject[], private playableObjects: PlayableObject[]) {
         this.canvasElement = document.getElementById(canvasId) as HTMLCanvasElement;
         this.ctx = this.canvasElement.getContext('2d')!;
         this.ctx.scale(scale.x, scale.y);
     }
 
     resetBackground = () => {
-        // load last background probably get it from "Level class"
+        const {width, height } = this.canvasElement;
+        this.ctx.fillStyle = "#ffffff";
+        this.ctx.fillRect(0, 0, width, height);
     }
 
-    render = (configs: Config[]) => {
+    render = (configs: RenderConfig[]) => {
         // some config to render all gameObjects (only not background)
         // here should be a tree crwaling function but now its super easy provider
 
@@ -30,12 +33,10 @@ export class Renderer {
             if (config.rect) {
                 const {width, height, positionX, positionY, style: rectStyle} = config.rect;
 
-                this.ctx.rect(positionX, positionY, width, height);
-
                 if (rectStyle) {
                     if (rectStyle.fill) {
                         this.ctx.fillStyle = rectStyle.fill;
-                        this.ctx.fill()
+                        this.ctx.fillRect(positionX, positionY, width, height);
                     }
                 }
             }
@@ -43,12 +44,18 @@ export class Renderer {
     }
 
     update = (time = 0) => {
+        const renderConfigs: RenderConfig[] = [];
+
         const deltaTime = time - this.lastTime;
         this.lastTime = time;
         this.dropCounter += deltaTime;
 
-        const renderConfigs: Config[] = [];
+        this.resetBackground();
 
+        for (let gameObject of this.gameObjects) {
+            // should also create a matrix grid for detection system for character blocks
+            renderConfigs.push(gameObject.getRenderConfig());
+        }
 
         // renderConfig should be created from calculation based on provided gameObjects
         // some sorting and they dependency injection?
@@ -59,17 +66,14 @@ export class Renderer {
         // (own dropCounter in class that will be check with lastTime from renderer?)
 
         if (this.dropCounter >= this.moveDeltaInMs) {
-
+            for (let playableObject of this.playableObjects) {
+                // there should be detection checking here probably too
+                playableObject.recalculate();
+                renderConfigs.push(playableObject.getRenderConfig())
+            }
         }
 
-        for (let gameObject of this.gameObjects) {
-            // should also create a matrix grid for detection system for character blocks
-            renderConfigs.push(gameObject.getRenderConfig());
-        }
-
-        this.resetBackground();
         this.render(renderConfigs);
-
         this.animationFrameHandlerId = requestAnimationFrame(this.update);
     };
 

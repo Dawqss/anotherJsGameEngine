@@ -5,7 +5,7 @@ export interface GameObjectSizePosition {
     positionY: number;
 }
 
-export interface Config {
+export interface RenderConfig {
     rect?: {
         width: number,
         height: number,
@@ -15,4 +15,11 @@ export interface Config {
             fill: string;
         }
     }
+}
+
+export enum KeyboardArrows {
+    ArrowDown = "ArrowDown",
+    ArrowLeft = "ArrowLeft",
+    ArrowRight = "ArrowRight",
+    ArrowUp = "ArrowUp",
 }

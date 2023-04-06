@@ -4,10 +4,10 @@ export class RectangleBoxGround extends GameObject {
     getRenderConfig(): any {
         return {
             rect: {
-                width: this.initialSizePosition.width,
-                height: this.initialSizePosition.height,
-                positionX: this.initialSizePosition.positionX,
-                positionY: this.initialSizePosition.positionY,
+                width: this.sizePosition.width,
+                height: this.sizePosition.height,
+                positionX: this.sizePosition.positionX,
+                positionY: this.sizePosition.positionY,
                 style: {
                     fill: "#E1C16E"
                 }

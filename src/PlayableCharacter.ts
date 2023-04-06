@@ -1,8 +1,21 @@
 import {GameObject} from "./GameObject";
-import {GameObjectSizePosition} from "./types";
+import {GameObjectSizePosition, KeyboardArrows} from "./types";
 
 export abstract class PlayableObject extends GameObject {
-    constructor(public initialSizePosition: GameObjectSizePosition) {
-        super(initialSizePosition);
+    lastMove: KeyboardArrows | undefined;
+
+    constructor(public sizePosition: GameObjectSizePosition) {
+        super(sizePosition);
+        this.addControlHandlers();
     }
+
+    addControlHandlers = () => {
+        // TODO: add feat - shortcuts (Albert?)
+        document.addEventListener("keydown", (event) => {
+            console.log(event);
+            this.lastMove = event.key as KeyboardArrows;
+        });
+    };
+
+    abstract recalculate(): void;
 }

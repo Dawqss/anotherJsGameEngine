@@ -1,7 +1,8 @@
-import {GameObjectSizePosition} from "./types";
+import {GameObjectSizePosition, RenderConfig} from "./types";
 
 export abstract class GameObject {
-    constructor(public initialSizePosition: GameObjectSizePosition) {}
+    public config: RenderConfig | undefined;
+    constructor(public sizePosition: GameObjectSizePosition) {}
 
 
     // how to render it?
@@ -15,7 +16,7 @@ export abstract class GameObject {
     // 3. pass it to unstable object so we can interact with them (eg fire torch, little grass movement etc)
     // 4. render all things from gameObjects or/and character object
 
-    abstract getRenderConfig(): any;
+    abstract getRenderConfig(): RenderConfig;
 }
 
 // EXAMPLE

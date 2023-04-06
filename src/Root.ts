@@ -4,7 +4,7 @@ export class Root {
     renderer: Renderer;
 
     constructor(private canvasId: string, private scale: {x: number, y: number}) {
-        this.renderer = new Renderer(canvasId, scale);
+        this.renderer = new Renderer(0, canvasId, scale);
     }
 
     // loadGameObjects() {

@@ -10,10 +10,15 @@ export class Renderer {
 
     moveDeltaInMs = 600;
 
-    constructor(private canvasId: string, private scale: {x: number, y: number}) {
-        this.canvasElement = document.getElementById(canvasId) as HTMLCanvasElement;
-        this.ctx = this.canvasElement.getContext('2d')!;
-        this.ctx.scale(scale.x, scale.y);
+    constructor(
+        animationFrameHandlerId: number,
+        private canvasId: string,
+        private scale: {x: number, y: number})
+    {
+            this.animationFrameHandlerId = animationFrameHandlerId;
+            this.canvasElement = document.getElementById(canvasId) as HTMLCanvasElement;
+            this.ctx = this.canvasElement.getContext('2d')!;
+            this.ctx.scale(scale.x, scale.y);
     }
 
     resetBackground() {

@@ -7,6 +7,14 @@ export class GameObject {
     // nie da sie go ruszyc
     immutable: boolean;
 
+    constructor(width: number, height: number, positionX: number, positionY: number, immutable: boolean) {
+        this.width = width;
+        this.height = height;
+        this.positionX = positionX;
+        this.positionY = positionY;
+        this.immutable = immutable;
+    }
+
     // how to render it?
     // should probably return some config on end and then merge it with other configs
     // I should have here stable object or unstable objects information to check if I can somehow interact with object

@@ -1,11 +1,8 @@
-export class GameObject {
-    width: number;
-    height: number;
-    positionX: number;
-    positionY: number;
+import {GameObjectSizePosition} from "./types";
 
-    // nie da sie go ruszyc
-    immutable: boolean;
+export abstract class GameObject {
+    constructor(public initialSizePosition: GameObjectSizePosition) {}
+
 
     constructor(width: number, height: number, positionX: number, positionY: number, immutable: boolean) {
         this.width = width;
@@ -26,7 +23,31 @@ export class GameObject {
     // 3. pass it to unstable object so we can interact with them (eg fire torch, little grass movement etc)
     // 4. render all things from gameObjects or/and character object
 
-    getRenderConfig(): any {
-
-    }
+    abstract getRenderConfig(): any;
 }
+
+// EXAMPLE
+// abstract class Department {
+//     constructor(public name: string) {}
+//
+//     printName(): void {
+//         console.log("Department name: " + this.name);
+//     }
+//
+//     abstract printMeeting(): void; // must be implemented in derived classes
+// }
+//
+// class AccountingDepartment extends Department {
+//     constructor() {
+//         super("Accounting and Auditing"); // constructors in derived classes must call super()
+//     }
+//
+//     printMeeting(): void {
+//         console.log("The Accounting Department meets each Monday at 10am.");
+//     }
+//
+//     generateReports(): void {
+//         console.log("Generating accounting reports...");
+//     }
+// }
+//

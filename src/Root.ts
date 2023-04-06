@@ -1,20 +1,15 @@
 import {Renderer} from "./Renderer";
+import {GameObject} from "./GameObject";
 
 export class Root {
     renderer: Renderer;
 
-    constructor(private canvasId: string, private scale: {x: number, y: number}) {
-        this.renderer = new Renderer(0, canvasId, scale);
+    constructor(private canvasId: string, private scale: {x: number, y: number}, private gameObjects: GameObject[]) {
+        this.renderer = new Renderer(canvasId, scale, gameObjects);
     }
 
-    // loadGameObjects() {
-    //
-    // }
-
     // wysylanie informacji do wszystkich blokow na raz
-
     // posiadac obiekt i ruszanie aka x,y, width, height, + velocity
-
     // Class Level (przejscie miedzy levelami?)
 
     start() {

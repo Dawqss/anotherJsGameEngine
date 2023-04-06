@@ -8,7 +8,9 @@ module.exports = {
         path: path.resolve(__dirname, './dist'),
         filename: 'bundle.js',
     },
-    plugins: [new HtmlWebpackPlugin()],
+    plugins: [new HtmlWebpackPlugin({
+        template: path.resolve(__dirname, "./src/index.html")
+    })],
     resolve: {
         extensions: ['.ts', '.js'],
     },
@@ -24,7 +26,7 @@ module.exports = {
     devtool: 'source-map',
     devServer: {
         static: {
-            directory: path.join(__dirname, 'src'),
+            directory: path.join(__dirname, './'),
         },
         compress: true,
         port: 3000,

@@ -29,11 +29,18 @@ export class Renderer {
             // should be encapsulated in smaller function eg. ifRect?
             if (config.rect) {
                 const {width, height, positionX, positionY, style: rectStyle} = config.rect;
+
+                this.ctx.rect(positionX, positionY, width, height);
+
                 if (rectStyle) {
                     if (rectStyle.fill) {
-                        this.ctx.fillRect(positionX, positionY, width, height);
+                        this.ctx.fillStyle = rectStyle.fill;
+                        this.ctx.fill()
                     }
                 }
+                // this.ctx.fill()
+                // ctx.rect(20, 20, 150, 100);
+                // ctx.stroke();
             }
         }
     }

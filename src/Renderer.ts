@@ -18,16 +18,19 @@ export class Renderer {
         this.ctx.scale(scale.x, scale.y);
     }
 
-    resetBackground() {
+    resetBackground = () => {
         // load last background probably get it from "Level class"
     }
 
-    render(config: Config) {
+    render = (config: Config) => {
         // some config to render all gameObjects (only not background)
+        // here should be a tree crwaling function but now its super easy provider
+
     }
 
-    update(time = 0) {
-        const deltaTime = time - this.lastTime;
+    update = (time = 0) => {
+        console.log(this);
+        /*const deltaTime = time - this.lastTime;
         this.lastTime = time;
 
         this.dropCounter += deltaTime;
@@ -39,16 +42,18 @@ export class Renderer {
         // renderConfig should be created from calculation based on provided gameObjects
         // some sorting and they dependency injection?
 
+
+
         this.resetBackground();
 
-        this.render(renderConfig);
+        this.render(renderConfig);*/
     };
 
-    start() {
+    start = () => {
         this.animationFrameHandlerId = requestAnimationFrame(this.update);
     }
 
-    stop() {
+    stop = () => {
         if (this.animationFrameHandlerId === undefined) {
             return;
         }

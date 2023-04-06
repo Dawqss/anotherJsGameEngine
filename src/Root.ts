@@ -1,5 +1,4 @@
 import {Renderer} from "./Renderer";
-import {RectangleBoxGround} from "../game/RectangleBoxGround";
 import {GameObject} from "./GameObject";
 
 export class Root {

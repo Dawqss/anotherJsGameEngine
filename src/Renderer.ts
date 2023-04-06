@@ -12,8 +12,12 @@ export class Renderer {
 
     moveDeltaInMs = 600;
 
-    constructor(private canvasId: string, private scale: {x: number, y: number}, private gameObjects: GameObject[], private playableObjects: PlayableObject[]) {
-        this.canvasElement = document.getElementById(canvasId) as HTMLCanvasElement;
+    constructor(private scale: {x: number, y: number}, private gameObjects: GameObject[], private playableObjects: PlayableObject[]) {
+        this.canvasElement = document.createElement('canvas');
+        this.canvasElement.width = window.innerWidth;
+        this.canvasElement.height = window.innerHeight;
+        document.body.appendChild(this.canvasElement);
+
         this.ctx = this.canvasElement.getContext('2d')!;
         this.ctx.scale(scale.x, scale.y);
     }

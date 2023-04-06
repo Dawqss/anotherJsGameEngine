@@ -1,8 +1,15 @@
 import {GameObject} from "./GameObject";
 import {GameObjectSizePosition, KeyboardArrows} from "./types";
 
+export const emptyPlayableKeyMap: Record<KeyboardArrows, boolean> = {
+    [KeyboardArrows.ArrowUp]: false,
+    [KeyboardArrows.ArrowDown]: false,
+    [KeyboardArrows.ArrowLeft]: false,
+    [KeyboardArrows.ArrowRight]: false
+};
+
 export abstract class PlayableObject extends GameObject {
-    lastMove: KeyboardArrows | undefined;
+    keyMap: Record<KeyboardArrows, boolean> = emptyPlayableKeyMap;
 
     constructor(public sizePosition: GameObjectSizePosition) {
         super(sizePosition);
@@ -10,11 +17,17 @@ export abstract class PlayableObject extends GameObject {
     }
 
     addControlHandlers = () => {
-        // TODO: add feat - shortcuts (Albert?)
-        document.addEventListener("keydown", (event) => {
-            console.log(event);
-            this.lastMove = event.key as KeyboardArrows;
-        });
+        window.addEventListener('keydown', (e) => {
+            if (!this.keyMap[e.code as KeyboardArrows]) {
+                this.keyMap[e.code as KeyboardArrows] = true;
+            }
+        })
+
+        window.addEventListener('keyup', (e) => {
+            if (this.keyMap[e.code as KeyboardArrows]) {
+                this.keyMap[e.code as KeyboardArrows] = false;
+            }
+        })
     };
 
     abstract recalculate(): void;

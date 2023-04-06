@@ -5,8 +5,8 @@ import {PlayableObject} from "./PlayableCharacter";
 export class Root {
     renderer: Renderer;
 
-    constructor(private canvasId: string, private scale: {x: number, y: number}, private gameObjects: GameObject[], private playableObjects: PlayableObject[]) {
-        this.renderer = new Renderer(canvasId, scale, gameObjects, playableObjects);
+    constructor(private scale: {x: number, y: number}, private gameObjects: GameObject[], private playableObjects: PlayableObject[]) {
+        this.renderer = new Renderer(scale, gameObjects, playableObjects);
     }
 
     // wysylanie informacji do wszystkich blokow na raz

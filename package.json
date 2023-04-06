@@ -5,7 +5,8 @@
   "license": "MIT",
   "scripts": {
     "build": "webpack",
-    "develop": "webpack --watch"
+    "develop": "webpack --watch",
+    "serve": "webpack serve --open"
   },
   "devDependencies": {
     "@types/node": "^18.15.11",

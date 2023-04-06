@@ -22,13 +22,13 @@ export abstract class PlayableObject extends GameObject {
             if (!this.keyMap[e.code as KeyboardArrows]) {
                 this.keyMap[e.code as KeyboardArrows] = true;
             }
-        })
+        });
 
         window.addEventListener('keyup', (e) => {
             if (this.keyMap[e.code as KeyboardArrows]) {
                 this.keyMap[e.code as KeyboardArrows] = false;
             }
-        })
+        });
     };
 
     abstract recalculate(): void;

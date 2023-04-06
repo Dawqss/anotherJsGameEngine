@@ -59,7 +59,6 @@ export class Renderer {
 
         this.resetBackground();
 
-
         // DETECTION
 
         for (let gameObject of this.gameObjects) {

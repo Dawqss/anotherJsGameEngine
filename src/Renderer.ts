@@ -12,6 +12,8 @@ export class Renderer {
 
     moveDeltaInMs = 600;
 
+    detectObject: any = undefined;
+
     constructor(private scale: {x: number, y: number}, private gameObjects: GameObject[], private playableObjects: PlayableObject[]) {
         this.canvasElement = document.createElement('canvas');
         this.canvasElement.width = window.innerWidth;
@@ -54,11 +56,21 @@ export class Renderer {
         this.lastTime = time;
         this.dropCounter += deltaTime;
 
+        const frameDetect = [];
+
         this.resetBackground();
+
+        // wyliczana detekecja, overlapping matrixow 2 wymiarowych,
+        // tworzony obiekt z informacja jaki obiekt styka sie z jaka scianka twojego obiektu
+        // w jakich miejscach jesszcze moznda dodac
 
         for (let gameObject of this.gameObjects) {
             // should also create a matrix grid for detection system for character blocks
             renderConfigs.push(gameObject.getRenderConfig());
+
+            if (gameObject.isCollisionDetectionEnabled && gameObject.getFrameDetection) {
+                frameDetect.push(gameObject.getFrameDetection())
+            }
         }
 
         // renderConfig should be created from calculation based on provided gameObjects
@@ -68,6 +80,8 @@ export class Renderer {
         // on character movement or should run each 600ms
         // I think we can add more interval elements functions eg. animation?
         // (own dropCounter in class that will be check with lastTime from renderer?)
+
+        console.log(frameDetect);
 
         if (this.dropCounter >= this.moveDeltaInMs) {
             for (let playableObject of this.playableObjects) {
@@ -91,6 +105,10 @@ export class Renderer {
         }
 
         cancelAnimationFrame(this.animationFrameHandlerId);
+    }
+
+    addDetectObject = (object: any): void => {
+        this.detectObject = object;
     }
 }
 

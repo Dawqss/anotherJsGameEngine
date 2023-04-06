@@ -2,6 +2,8 @@ import {GameObjectSizePosition, RenderConfig} from "./types";
 
 export abstract class GameObject {
     public config: RenderConfig | undefined;
+    public isCollisionDetectionEnabled = false;
+
     constructor(public sizePosition: GameObjectSizePosition) {}
 
 
@@ -17,7 +19,10 @@ export abstract class GameObject {
     // 4. render all things from gameObjects or/and character object
 
     abstract getRenderConfig(): RenderConfig;
+    abstract getFrameDetection(): { x0: number; y0: number; x1: number; y1: number } | undefined;
 }
+
+
 
 // EXAMPLE
 // abstract class Department {

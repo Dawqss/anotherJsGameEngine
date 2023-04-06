@@ -1,6 +1,5 @@
 import {GameObject} from "./GameObject";
-
-type Config = any; // to be created
+import {Config} from "./types";
 
 export class Renderer {
     canvasElement: HTMLCanvasElement;
@@ -22,35 +21,56 @@ export class Renderer {
         // load last background probably get it from "Level class"
     }
 
-    render = (config: Config) => {
+    render = (configs: Config[]) => {
         // some config to render all gameObjects (only not background)
         // here should be a tree crwaling function but now its super easy provider
 
+        for (let config of configs) {
+            // should be encapsulated in smaller function eg. ifRect?
+            if (config.rect) {
+                const {width, height, positionX, positionY, style: rectStyle} = config.rect;
+                if (rectStyle) {
+                    if (rectStyle.fill) {
+                        this.ctx.fillRect(positionX, positionY, width, height);
+                    }
+                }
+            }
+        }
     }
 
     update = (time = 0) => {
-        console.log(this);
-        /*const deltaTime = time - this.lastTime;
+        const deltaTime = time - this.lastTime;
         this.lastTime = time;
-
         this.dropCounter += deltaTime;
 
-        const renderConfig = {}
+        const renderConfigs: Config[] = [];
 
-        console.log(this.gameObjects);
 
         // renderConfig should be created from calculation based on provided gameObjects
         // some sorting and they dependency injection?
 
+        // Move handler I guess cause it run in 600ms interval so here you should run function that only should trigger
+        // on character movement or should run each 600ms
+        // I think we can add more interval elements functions eg. animation?
+        // (own dropCounter in class that will be check with lastTime from renderer?)
 
+        if (this.dropCounter >= this.moveDeltaInMs) {
+
+        }
+
+        for (let gameObject of this.gameObjects) {
+            // should also create a matrix grid for detection system for character blocks
+            renderConfigs.push(gameObject.getRenderConfig());
+        }
 
         this.resetBackground();
+        this.render(renderConfigs);
 
-        this.render(renderConfig);*/
+        this.animationFrameHandlerId = requestAnimationFrame(this.update);
     };
 
     start = () => {
-        this.animationFrameHandlerId = requestAnimationFrame(this.update);
+        this.update();
     }
 
     stop = () => {

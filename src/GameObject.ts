@@ -1,10 +1,24 @@
-import {GameObjectSizePosition, RenderConfig} from "./types";
+import { v4 } from 'uuid';
+import {DetectionFrame, GameObjectSizePosition, RenderConfig} from "./types";
 
 export abstract class GameObject {
     public config: RenderConfig | undefined;
     public isCollisionDetectionEnabled = false;
+    public name: string;
 
-    constructor(public sizePosition: GameObjectSizePosition) {}
+    constructor(public sizePosition: GameObjectSizePosition) {
+        this.name = v4();
+    }
+
+    getFrameDetection(): DetectionFrame {
+        return {
+            x0: this.sizePosition.positionX,
+            y0: this.sizePosition.positionY,
+            x1: this.sizePosition.positionX + this.sizePosition.width,
+            y1: this.sizePosition.positionY + this.sizePosition.height,
+            id: this.name
+        };
+    }
 
 
     // how to render it?
@@ -19,7 +33,7 @@ export abstract class GameObject {
     // 4. render all things from gameObjects or/and character object
 
     abstract getRenderConfig(): RenderConfig;
-    abstract getFrameDetection(): { x0: number; y0: number; x1: number; y1: number } | undefined;
+
 }
 
 

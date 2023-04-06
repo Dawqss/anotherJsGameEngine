@@ -67,8 +67,6 @@ export class CharacterFatRectangle extends PlayableObject {
         return y;
     }
 
-    getFrameDetection(): { x0: number; y0: number; x1: number; y1: number } | undefined {
-        return ;
-    }
+
 }
 

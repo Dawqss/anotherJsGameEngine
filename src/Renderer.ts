@@ -1,6 +1,7 @@
 import {GameObject} from "./GameObject";
-import {RenderConfig} from "./types";
+import {DetectionFrame, RenderConfig} from "./types";
 import {PlayableObject} from "./PlayableCharacter";
+import {Detection} from "./Detection";
 
 export class Renderer {
     canvasElement: HTMLCanvasElement;
@@ -56,38 +57,42 @@ export class Renderer {
         this.lastTime = time;
         this.dropCounter += deltaTime;
 
-        const frameDetect = [];
+        const frameDetect: DetectionFrame[] = [];
 
         this.resetBackground();
 
-        // wyliczana detekecja, overlapping matrixow 2 wymiarowych,
-        // tworzony obiekt z informacja jaki obiekt styka sie z jaka scianka twojego obiektu
-        // w jakich miejscach jesszcze moznda dodac
+
+        // DETECTION
 
         for (let gameObject of this.gameObjects) {
             // should also create a matrix grid for detection system for character blocks
-            renderConfigs.push(gameObject.getRenderConfig());
+            // renderConfigs.push(gameObject.getRenderConfig());
 
             if (gameObject.isCollisionDetectionEnabled && gameObject.getFrameDetection) {
                 frameDetect.push(gameObject.getFrameDetection())
             }
         }
 
-        // renderConfig should be created from calculation based on provided gameObjects
-        // some sorting and they dependency injection?
+        if (this.dropCounter >= this.moveDeltaInMs) {
+            for (let playableObject of this.playableObjects) {
+                // recalculate wstepny dla detectu
+                playableObject.recalculate();
+                frameDetect.push(playableObject.getFrameDetection());
+            }
+        }
 
-        // Move handler I guess cause it run in 600ms interval so here you should run function that only should trigger
-        // on character movement or should run each 600ms
-        // I think we can add more interval elements functions eg. animation?
-        // (own dropCounter in class that will be check with lastTime from renderer?)
+        const detection = new Detection(frameDetect);
+        detection.testKurwa();
 
-        console.log(frameDetect);
+        // END OF DETECTION
+
+        for (let gameObject of this.gameObjects) {
+            renderConfigs.push(gameObject.getRenderConfig());
+        }
 
         if (this.dropCounter >= this.moveDeltaInMs) {
             for (let playableObject of this.playableObjects) {
-                // there should be detection checking here probably too
-                playableObject.recalculate();
-                renderConfigs.push(playableObject.getRenderConfig())
+                renderConfigs.push(playableObject.getRenderConfig());
             }
         }
 
@@ -111,4 +116,3 @@ export class Renderer {
         this.detectObject = object;
     }
 }
-

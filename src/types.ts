@@ -23,3 +23,10 @@ export enum KeyboardArrows {
     ArrowRight = "ArrowRight",
     ArrowUp = "ArrowUp",
 }
+
+export interface CollisionEvent {
+    rootElementId: string;
+    targetElements: {rootElementId: string;}[];
+}
+
+export interface DetectionFrame { x0: number; y0: number; x1: number; y1: number, id: string };

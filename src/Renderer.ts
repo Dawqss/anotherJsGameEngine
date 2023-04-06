@@ -3,11 +3,12 @@ type Config = any; // to be created
 export class Renderer {
     canvasElement: HTMLCanvasElement;
     ctx: CanvasRenderingContext2D;
+    animationFrameHandlerId: number;
 
     lastTime = 0;
-    // probably should be in constructor
-    moveDeltaInMs = 600;
     dropCounter = 0;
+
+    moveDeltaInMs = 600;
 
     constructor(private canvasId: string, private scale: {x: number, y: number}) {
         this.canvasElement = document.getElementById(canvasId) as HTMLCanvasElement;
@@ -39,7 +40,15 @@ export class Renderer {
     };
 
     start() {
-        requestAnimationFrame(this.update);
+        this.animationFrameHandlerId = requestAnimationFrame(this.update);
+    }
+
+    stop() {
+        if (this.animationFrameHandlerId === undefined) {
+            return;
+        }
+
+        cancelAnimationFrame(this.animationFrameHandlerId);
     }
 }
 

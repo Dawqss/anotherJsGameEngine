@@ -26,11 +26,7 @@ export class CharacterFatRectangle extends PlayableObject {
     recalculate() {
         const x = this.getXAxisFromKeyMap();
         const y = this.getYAxisFromKeyMap();
-        if (x !== 0 || y !== 0) {
-            this.updateAcceleration(true);
-        }else {
-            this.updateAcceleration(false);
-        }
+        this.updateAcceleration(x !== 0 || y !== 0);
         // we should extract this to other class eg. PlayerControls (should be abstract)
         const vector = {
             x: x * this.multiplier * this._acceleration,
@@ -80,7 +76,7 @@ export class CharacterFatRectangle extends PlayableObject {
 
     private updateAcceleration(
         add: boolean,
-        max: number = 1,
+        max: number = 2,
         acceleration: number = 2,
         deceleration: number = 5) {
             if (add) {

@@ -74,6 +74,10 @@ export class Renderer {
             if (this.dropCounter >= playableObject.moveDeltaInMs) {
                 playableObject.recalculate();
                 frameDetect.push(playableObject.getFrameDetection());
+                console.log({
+                    objectName: playableObject.name,
+                    velocity: playableObject.getFrameVelocity()
+                })
             }
         }
 

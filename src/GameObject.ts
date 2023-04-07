@@ -2,6 +2,7 @@ import { v4 } from 'uuid';
 import {DetectionFrame, GameObjectSizePosition, RenderConfig} from "./types";
 
 export abstract class GameObject {
+    private _lastPosition: { x: number, y: number } | undefined;
     public config: RenderConfig | undefined;
     public isCollisionDetectionEnabled = false;
     public name: string;
@@ -11,6 +12,7 @@ export abstract class GameObject {
     }
 
     getFrameDetection(): DetectionFrame {
+
         return {
             x0: this.sizePosition.positionX,
             y0: this.sizePosition.positionY,
@@ -18,6 +20,20 @@ export abstract class GameObject {
             y1: this.sizePosition.positionY + this.sizePosition.height,
             id: this.name
         };
+    }
+
+    getFrameVelocity(): number {
+        let result = 0
+        if (this._lastPosition) {
+            const x = this._lastPosition.x - this.sizePosition.positionX;
+            const y = this._lastPosition.y - this.sizePosition.positionY;
+            result =  Math.sqrt(x * x + y * y);
+        }
+        this._lastPosition = {
+            x: this.sizePosition.positionX,
+            y: this.sizePosition.positionY
+        }
+        return result;
     }
 
 

@@ -29,11 +29,15 @@ export abstract class GameObject {
             const y = this._lastPosition.y - this.sizePosition.positionY;
             result =  Math.sqrt(x * x + y * y);
         }
+        this._updateLastPosition();
+        return result;
+    }
+
+    private _updateLastPosition() {
         this._lastPosition = {
             x: this.sizePosition.positionX,
             y: this.sizePosition.positionY
         }
-        return result;
     }
 
 

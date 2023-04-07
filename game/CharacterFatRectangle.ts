@@ -5,6 +5,7 @@ export class CharacterFatRectangle extends PlayableObject {
     moveDeltaInMs = 16.6;
     // TODO: add probably this & acceleration
     multiplier: number = 2.5;
+    private _acceleration: number = 0.1;
 
     getRenderConfig = (): RenderConfig => {
         this.config = {
@@ -14,7 +15,7 @@ export class CharacterFatRectangle extends PlayableObject {
                 positionX: this.sizePosition.positionX,
                 positionY: this.sizePosition.positionY,
                 style: {
-                    fill: "#00ff00"
+                    fill: "#1e4800"
                 }
             }
         }
@@ -23,14 +24,20 @@ export class CharacterFatRectangle extends PlayableObject {
     }
 
     recalculate() {
+        const x = this.getXAxisFromKeyMap();
+        const y = this.getYAxisFromKeyMap();
+        if (x !== 0 || y !== 0) {
+            this.updateAcceleration(true);
+        }else {
+            this.updateAcceleration(false);
+        }
         // we should extract this to other class eg. PlayerControls (should be abstract)
         const vector = {
-            x: this.getXAxisFromKeyMap() * this.multiplier,
-            y: this.getYAxisFromKeyMap() * this.multiplier
+            x: x * this.multiplier * this._acceleration,
+            y: y * this.multiplier * this._acceleration
         };
 
         this.keyMap = emptyPlayableKeyMap;
-
         this.sizePosition.positionY += vector.y;
         this.sizePosition.positionX += vector.x;
     }
@@ -71,6 +78,20 @@ export class CharacterFatRectangle extends PlayableObject {
         return y;
     }
 
-
+    private updateAcceleration(
+        add: boolean,
+        max: number = 1,
+        acceleration: number = 2,
+        deceleration: number = 5) {
+            if (add) {
+                if (this._acceleration < max) {
+                    this._acceleration += acceleration/100;
+                }
+            } else {
+                if (this._acceleration > 0) {
+                    this._acceleration -= deceleration/100;
+                }
+            }
+    }
 }
 

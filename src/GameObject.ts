@@ -1,18 +1,32 @@
 import { v4 } from 'uuid';
 import {DetectionFrame, GameObjectSizePosition, RenderConfig} from "./types";
+import {Vector2} from "./common";
 
 export abstract class GameObject {
     private _lastPosition: { x: number, y: number } | undefined;
+    public currentVector: Vector2;
     public config: RenderConfig | undefined;
-    public isCollisionDetectionEnabled = false;
+    public isCollisionDetectionEnabled = true;
+    public isDragEnabled = true;
+    public dragMultiplier = 1.05;
+    public isBounceEnabled = true;
+    public bounceMultiplier = 2.5;
+
     public name: string;
 
     constructor(public sizePosition: GameObjectSizePosition) {
         this.name = v4();
+        this.currentVector = new Vector2(0, 0);
+    }
+
+    update(){
+        this._updateBounce();
+        this._updateDrag();
+        this._updateLastPosition();
     }
 
     getFrameDetection(): DetectionFrame {
-
+        if (!this.isCollisionDetectionEnabled) return {x0: 0, y0: 0, x1: 0, y1: 0, id: this.name};
         return {
             x0: this.sizePosition.positionX,
             y0: this.sizePosition.positionY,
@@ -29,8 +43,27 @@ export abstract class GameObject {
             const y = this._lastPosition.y - this.sizePosition.positionY;
             result =  Math.sqrt(x * x + y * y);
         }
-        this._updateLastPosition();
         return result;
+    }
+
+    vectorAdd(vector: Vector2) {
+        this.currentVector = this.currentVector.add(vector);
+    }
+
+    bounce(){
+        this.currentVector = this.currentVector.multiply(-1 * this.bounceMultiplier);
+    }
+
+    private _updateBounce() {
+        if (!this.isBounceEnabled) return;
+        //this.currentVector = this.currentVector.multiply(-1 * this.bounceMultiplier);
+    }
+
+    private _updateDrag() {
+        if (!this.isDragEnabled) return;
+        if (this.dragMultiplier > 1){
+            this.currentVector = this.currentVector.multiply(1/this.dragMultiplier);
+        }
     }
 
     private _updateLastPosition() {

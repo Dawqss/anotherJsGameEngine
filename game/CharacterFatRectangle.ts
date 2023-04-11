@@ -1,5 +1,6 @@
 import {emptyPlayableKeyMap, PlayableObject} from "../src/PlayableCharacter";
 import {KeyboardArrows, RenderConfig} from "../src/types";
+import {Vector2} from "../src/common";
 
 export class CharacterFatRectangle extends PlayableObject {
     moveDeltaInMs = 16.6;
@@ -27,10 +28,11 @@ export class CharacterFatRectangle extends PlayableObject {
         const x = this.getXAxisFromKeyMap();
         const y = this.getYAxisFromKeyMap();
         this.updateAcceleration(x !== 0 || y !== 0);
+        this.vectorAdd(new Vector2(x, y));
         // we should extract this to other class eg. PlayerControls (should be abstract)
         const vector = {
-            x: x * this.multiplier * this._acceleration,
-            y: y * this.multiplier * this._acceleration
+            x: this.currentVector.x,
+            y: this.currentVector.y
         };
 
         this.keyMap = emptyPlayableKeyMap;

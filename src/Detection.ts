@@ -4,6 +4,7 @@ export class Detection {
     constructor(public detectionFrames: DetectionFrame[]) {}
 
     aabbCollision(rect1: DetectionFrame, rect2: DetectionFrame) {
+        console.log(rect1, rect2)
         return (
             rect1.x0 < rect2.x1 &&
             rect1.x1 > rect2.x0 &&
@@ -17,6 +18,7 @@ export class Detection {
 
         if (this.detectionFrames.length >= 2 && this.aabbCollision(el1, el2)) {
             console.warn(this.aabbCollision(el1, el2));
+            return true;
         }
     }
 }

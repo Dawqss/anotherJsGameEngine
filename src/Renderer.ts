@@ -73,16 +73,16 @@ export class Renderer {
         for (let playableObject of this.playableObjects) {
             if (this.dropCounter >= playableObject.moveDeltaInMs) {
                 playableObject.recalculate();
+                playableObject.update();
                 frameDetect.push(playableObject.getFrameDetection());
-                console.log({
-                    objectName: playableObject.name,
-                    velocity: playableObject.getFrameVelocity()
-                })
             }
         }
 
         const detection = new Detection(frameDetect);
-        detection.testKurwa();
+
+        if (detection.testKurwa()){
+            this.playableObjects[0].bounce();
+        }
 
         // END OF DETECTION
 

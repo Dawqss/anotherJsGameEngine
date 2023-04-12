@@ -4,18 +4,16 @@ import {Vector2} from "./common";
 import {Detection} from "./Detection";
 
 export abstract class GameObject {
-    private _lastPosition: { x: number, y: number } | undefined;
+    private lastPosition: { x: number, y: number } | undefined;
     public currentVector: Vector2;
-    public config: RenderConfig | undefined;
     public isCollisionDetectionEnabled = true;
     public isDragEnabled = true;
     public dragMultiplier = 1.05;
-    public isBounceEnabled = true;
+    public isBounceEnabled = false;
     public bounceMultiplier = 2.5;
-
     public name: string;
 
-    constructor(public sizePosition: GameObjectSizePosition, public detection: Detection) {
+    constructor(public sizePosition: GameObjectSizePosition, public detection: Detection, public config: RenderConfig) {
         this.name = v4();
         this.currentVector = new Vector2(0, 0);
     }
@@ -26,8 +24,11 @@ export abstract class GameObject {
         this.updateLastPosition();
     }
 
-    getFrameDetection(): DetectionFrame {
-        if (!this.isCollisionDetectionEnabled) return {x0: 0, y0: 0, x1: 0, y1: 0, id: this.name};
+    getFrameDetection(): DetectionFrame | undefined {
+        if (!this.isCollisionDetectionEnabled) {
+            return undefined;
+        }
+
         return {
             x0: this.sizePosition.positionX,
             y0: this.sizePosition.positionY,
@@ -39,9 +40,9 @@ export abstract class GameObject {
 
     getFrameVelocity(): number {
         let result = 0
-        if (this._lastPosition) {
-            const x = this._lastPosition.x - this.sizePosition.positionX;
-            const y = this._lastPosition.y - this.sizePosition.positionY;
+        if (this.lastPosition) {
+            const x = this.lastPosition.x - this.sizePosition.positionX;
+            const y = this.lastPosition.y - this.sizePosition.positionY;
             result =  Math.sqrt(x * x + y * y);
         }
         return result;
@@ -71,7 +72,7 @@ export abstract class GameObject {
     }
 
     private updateLastPosition() {
-        this._lastPosition = {
+        this.lastPosition = {
             x: this.sizePosition.positionX,
             y: this.sizePosition.positionY
         }

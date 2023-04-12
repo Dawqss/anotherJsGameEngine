@@ -20,6 +20,7 @@
     "webpack-dev-server": "^4.13.2"
   },
   "dependencies": {
+    "@timohausmann/quadtree-js": "^1.2.5",
     "uuid": "^9.0.0"
   }
 }

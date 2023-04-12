@@ -1,12 +1,20 @@
-import {Grid} from "./Grid";
-import {DetectionFrame} from "./types";
+import Quadtree, { Rect as QuadRect } from '@timohausmann/quadtree-js';
+import {DetectionFrame, DetectionQuadFrame} from "./types";
+import {detectionFrameToQuadRect} from "./utils/detectionFrameToQuadRect";
+import {quadRectToDetectionFrame} from "./utils/quadRectToDetectionFrame";
 
 export class Detection {
-    private grid: Grid;
+    private currentQuadTree: Quadtree;
+    private previousQuadTree: Quadtree;
 
-    constructor(public detectionFrames: DetectionFrame[], cellSize: number) {
-        this.grid = new Grid(cellSize);
-        this.detectionFrames.forEach(frame => this.grid.insert(frame));
+    constructor() {
+        this.currentQuadTree = new Quadtree({
+            x: 0,
+            y: 0,
+            width: window.innerWidth,
+            height: window.innerHeight
+        });
+        this.previousQuadTree = this.currentQuadTree;
     }
 
     aabbCollision(rect1: DetectionFrame, rect2: DetectionFrame) {
@@ -18,14 +26,37 @@ export class Detection {
         );
     }
 
-    detectCollisions(): void {
-        this.detectionFrames.forEach(frame => {
-            const potentialCollisions = this.grid.query(frame);
-            potentialCollisions.forEach(potentialCollision => {
-                if (frame !== potentialCollision && this.aabbCollision(frame, potentialCollision)) {
-                    console.log(`Collision detected between ${frame.id} and ${potentialCollision.id}`);
-                }
-            });
+    addFrame(detectionFrame: DetectionFrame) {
+        this.currentQuadTree.insert(detectionFrameToQuadRect(detectionFrame));
+    }
+
+    detectCollisions(detectionFrame: DetectionFrame): DetectionFrame[] {
+        const {x0, x1, y0, y1} = detectionFrame;
+
+        const collidedElements = [];
+        const candidates = this.previousQuadTree.retrieve({
+            x: x0,
+            y: y0,
+            width: x1 - x0,
+            height: y1 - y0,
+        }) as DetectionQuadFrame[];
+
+        for (let candidate of candidates) {
+            if (candidate.id !== detectionFrame.id && this.aabbCollision(detectionFrame, quadRectToDetectionFrame(candidate))) {
+                collidedElements.push(quadRectToDetectionFrame(candidate));
+            }
+        }
+
+        return collidedElements;
+    }
+
+    swap(): void {
+        this.previousQuadTree = this.currentQuadTree;
+        this.currentQuadTree = new Quadtree({
+            x: 0,
+            y: 0,
+            width: window.innerWidth,
+            height: window.innerHeight
         });
     }
 }

@@ -1,5 +1,5 @@
 import {GameObject} from "./GameObject";
-import {DetectionFrame, RenderConfig} from "./types";
+import {RenderConfig} from "./types";
 import {PlayableObject} from "./PlayableCharacter";
 import {Detection} from "./Detection";
 
@@ -11,7 +11,7 @@ export class Renderer {
     lastTime = 0;
     dropCounter = 0;
 
-    constructor(private scale: {x: number, y: number}, private gameObjects: GameObject[], private playableObjects: PlayableObject[]) {
+    constructor(private scale: {x: number, y: number}, private gameObjects: GameObject[], private playableObjects: PlayableObject[], private detection: Detection) {
         this.canvasElement = document.createElement('canvas');
         this.canvasElement.width = window.innerWidth;
         this.canvasElement.height = window.innerHeight;
@@ -63,16 +63,21 @@ export class Renderer {
                 if (this.dropCounter >= gameObject.moveDeltaInMs) {
                     gameObject.recalculate();
                     gameObject.update();
-                    renderConfigs.push(gameObject.getRenderConfig());
                 }
             }
 
-            if (gameObject instanceof GameObject && gameObject.isCollisionDetectionEnabled && gameObject.getFrameDetection) {
-                renderConfigs.push(gameObject.getRenderConfig());
+            const frame = gameObject.getFrameDetection();
+            if (frame) {
+                this.detection.addFrame(frame);
             }
+
+            renderConfigs.push(gameObject.getRenderConfig());
         }
 
+        this.detection.swap();
+
         this.render(renderConfigs);
+
         this.animationFrameHandlerId = requestAnimationFrame(this.update);
     };
 

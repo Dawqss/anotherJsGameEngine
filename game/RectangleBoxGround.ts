@@ -1,5 +1,4 @@
 import {GameObject} from "../src/GameObject";
-import {DetectionFrame} from "../src/types";
 
 export class RectangleBoxGround extends GameObject {
     isCollisionDetectionEnabled = true;
@@ -18,7 +17,12 @@ export class RectangleBoxGround extends GameObject {
         }
     }
 
-    recalculate(detectionElement?: DetectionFrame) {
-
+    recalculate() {
+        const frame = this.getFrameDetection();
+        if (frame) {
+            console.log('frame', frame);
+            // const something = this.detection.detectCollisions(frame);
+            // console.log(something);
+        }
     }
 }

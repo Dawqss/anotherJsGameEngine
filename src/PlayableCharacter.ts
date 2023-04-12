@@ -1,5 +1,5 @@
 import {GameObject} from "./GameObject";
-import {GameObjectSizePosition, KeyboardArrows} from "./types";
+import {GameObjectSizePosition, KeyboardArrows, RenderConfig} from "./types";
 import {Detection} from "./Detection";
 
 export const emptyPlayableKeyMap: Record<KeyboardArrows, boolean> = {
@@ -13,8 +13,8 @@ export abstract class PlayableObject extends GameObject {
     public keyMap: Record<KeyboardArrows, boolean> = emptyPlayableKeyMap;
     public moveDeltaInMs: number = 600;
 
-    constructor(public sizePosition: GameObjectSizePosition, public detection: Detection) {
-        super(sizePosition, detection);
+    constructor(public sizePosition: GameObjectSizePosition, public detection: Detection, public config: RenderConfig) {
+        super(sizePosition, detection, config);
         this.addControlHandlers();
     }
 

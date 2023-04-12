@@ -1,3 +1,5 @@
+import {Rect} from "@timohausmann/quadtree-js";
+
 export interface GameObjectSizePosition {
     width: number;
     height: number;
@@ -29,4 +31,9 @@ export interface CollisionEvent {
     targetElements: {rootElementId: string;}[];
 }
 
-export interface DetectionFrame { x0: number; y0: number; x1: number; y1: number, id: string };
+// same as detection frame but for quadtree lib
+export interface DetectionQuadFrame extends Rect {
+    id: string;
+}
+
+export interface DetectionFrame { x0: number; y0: number; x1: number; y1: number, id: string }

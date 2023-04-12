@@ -1,12 +1,13 @@
 import {Renderer} from "./Renderer";
 import {GameObject} from "./GameObject";
 import {PlayableObject} from "./PlayableCharacter";
+import {Detection} from "./Detection";
 
 export class Root {
     renderer: Renderer;
 
-    constructor(private scale: {x: number, y: number}, private gameObjects: GameObject[], private playableObjects: PlayableObject[]) {
-        this.renderer = new Renderer(scale, gameObjects, playableObjects);
+    constructor(private scale: {x: number, y: number}, private gameObjects: GameObject[], private playableObjects: PlayableObject[], private detection: Detection) {
+        this.renderer = new Renderer(scale, gameObjects, playableObjects, detection);
     }
 
     // wysylanie informacji do wszystkich blokow na raz

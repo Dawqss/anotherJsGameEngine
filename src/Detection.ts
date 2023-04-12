@@ -1,10 +1,15 @@
-import {DetectionFrame, GameObjectSizePosition} from "./types";
+import {Grid} from "./Grid";
+import {DetectionFrame} from "./types";
 
 export class Detection {
-    constructor(public detectionFrames: DetectionFrame[]) {}
+    private grid: Grid;
+
+    constructor(public detectionFrames: DetectionFrame[], cellSize: number) {
+        this.grid = new Grid(cellSize);
+        this.detectionFrames.forEach(frame => this.grid.insert(frame));
+    }
 
     aabbCollision(rect1: DetectionFrame, rect2: DetectionFrame) {
-        console.log(rect1, rect2)
         return (
             rect1.x0 < rect2.x1 &&
             rect1.x1 > rect2.x0 &&
@@ -13,13 +18,14 @@ export class Detection {
         );
     }
 
-    testKurwa() {
-        const [el1, el2] = this.detectionFrames;
-
-        if (this.detectionFrames.length >= 2 && this.aabbCollision(el1, el2)) {
-            console.warn(this.aabbCollision(el1, el2));
-            return true;
-        }
+    detectCollisions(): void {
+        this.detectionFrames.forEach(frame => {
+            const potentialCollisions = this.grid.query(frame);
+            potentialCollisions.forEach(potentialCollision => {
+                if (frame !== potentialCollision && this.aabbCollision(frame, potentialCollision)) {
+                    console.log(`Collision detected between ${frame.id} and ${potentialCollision.id}`);
+                }
+            });
+        });
     }
 }
-

@@ -1,12 +1,17 @@
 import {emptyPlayableKeyMap, PlayableObject} from "../src/PlayableCharacter";
-import {KeyboardArrows, RenderConfig} from "../src/types";
+import {GameObjectSizePosition, KeyboardArrows, RenderConfig} from "../src/types";
 import {Vector2} from "../src/common";
+import {Detection} from "../src/Detection";
 
 export class CharacterFatRectangle extends PlayableObject {
     moveDeltaInMs = 16.6;
     // TODO: add probably this & acceleration
     multiplier: number = 2.5;
     private _acceleration: number = 0.1;
+
+    constructor(public sizePosition: GameObjectSizePosition, public detection: Detection) {
+        super(sizePosition, detection);
+    }
 
     getRenderConfig = (): RenderConfig => {
         this.config = {
@@ -28,7 +33,7 @@ export class CharacterFatRectangle extends PlayableObject {
         const x = this.getXAxisFromKeyMap();
         const y = this.getYAxisFromKeyMap();
         this.updateAcceleration(x !== 0 || y !== 0);
-        this.vectorAdd(new Vector2(x, y));
+        this.addVector(new Vector2(x, y));
         // we should extract this to other class eg. PlayerControls (should be abstract)
         const vector = {
             x: this.currentVector.x,

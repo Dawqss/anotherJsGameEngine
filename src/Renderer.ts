@@ -11,8 +11,6 @@ export class Renderer {
     lastTime = 0;
     dropCounter = 0;
 
-    detectObject: any = undefined;
-
     constructor(private scale: {x: number, y: number}, private gameObjects: GameObject[], private playableObjects: PlayableObject[]) {
         this.canvasElement = document.createElement('canvas');
         this.canvasElement.width = window.innerWidth;
@@ -48,6 +46,7 @@ export class Renderer {
         }
     }
 
+    // This is gameLoop
     update = (time = 0) => {
         const renderConfigs: RenderConfig[] = [];
 
@@ -55,44 +54,21 @@ export class Renderer {
         this.lastTime = time;
         this.dropCounter += deltaTime;
 
-        const frameDetect: DetectionFrame[] = [];
-
+        // zamiast tego ładowanie tła z jakiejs classy level pewnie
         this.resetBackground();
 
-        // DETECTION
 
-        for (let gameObject of this.gameObjects) {
-            // should also create a matrix grid for detection system for character blocks
-            // renderConfigs.push(gameObject.getRenderConfig());
-
-            if (gameObject.isCollisionDetectionEnabled && gameObject.getFrameDetection) {
-                frameDetect.push(gameObject.getFrameDetection())
+        for (let gameObject of [...this.gameObjects, ...this.playableObjects]) {
+            if (gameObject instanceof PlayableObject) {
+                if (this.dropCounter >= gameObject.moveDeltaInMs) {
+                    gameObject.recalculate();
+                    gameObject.update();
+                    renderConfigs.push(gameObject.getRenderConfig());
+                }
             }
-        }
 
-        for (let playableObject of this.playableObjects) {
-            if (this.dropCounter >= playableObject.moveDeltaInMs) {
-                playableObject.recalculate();
-                playableObject.update();
-                frameDetect.push(playableObject.getFrameDetection());
-            }
-        }
-
-        const detection = new Detection(frameDetect);
-
-        if (detection.testKurwa()){
-            this.playableObjects[0].bounce();
-        }
-
-        // END OF DETECTION
-
-        for (let gameObject of this.gameObjects) {
-            renderConfigs.push(gameObject.getRenderConfig());
-        }
-
-        for (let playableObject of this.playableObjects) {
-            if (this.dropCounter >= playableObject.moveDeltaInMs) {
-                renderConfigs.push(playableObject.getRenderConfig());
+            if (gameObject instanceof GameObject && gameObject.isCollisionDetectionEnabled && gameObject.getFrameDetection) {
+                renderConfigs.push(gameObject.getRenderConfig());
             }
         }
 
@@ -110,9 +86,5 @@ export class Renderer {
         }
 
         cancelAnimationFrame(this.animationFrameHandlerId);
-    }
-
-    addDetectObject = (object: any): void => {
-        this.detectObject = object;
     }
 }
